@@ -6,6 +6,7 @@ from models import Base, Book
 
 from datetime import datetime
 
+from sqlalchemy import and_, or_
 
 load_dotenv()
 DATABASE_URI = os.getenv("DATABASE_URI")
@@ -27,17 +28,26 @@ def recreate_database():
     Base.metadata.create_all(engine)
 
 
-def main():
-    book = Book(
-        title="Deep Learning",
-        author="Ian Goodfellow",
-        pages=775,
-        published=datetime(2016, 11, 18),
+if __name__ == "__main__":
+    s = Session()
+    # books either less than 500 pages or greater than 750 pages long
+    # books published between 2013 and 2017
+    # ordered by the number of pages
+    # limit it to one result
+
+    r = (
+        s.query(Book)
+        .filter(
+            and_(
+                or_(Book.pages < 500, Book.pages > 750),
+                Book.published.between(datetime(2013, 1, 1), datetime(2017, 1, 1)),
+            )
+        )
+        .order_by(Book.pages.desc())
+        .limit(1)
+        .first()
     )
 
-    recreate_database()
-    s = Session()
-    s.add(book)
-    s.commit()
-    print(s.query(Book).first())
+    print("FINAL:\n", r, "\n")
+
     s.close()
