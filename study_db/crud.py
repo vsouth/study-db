@@ -1,15 +1,12 @@
-import os
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-from models import Base, Book
-
 from datetime import datetime
+
+from sqlalchemy import create_engine
+from config import DATABASE_URI
+from models import Base, Book
+from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy import and_, or_
 
-load_dotenv()
-DATABASE_URI = os.getenv("DATABASE_URI")
 
 engine = create_engine(DATABASE_URI)
 Session = sessionmaker(bind=engine)
