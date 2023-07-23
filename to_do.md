@@ -1,6 +1,8 @@
 # TO DO
 ## thoughts
 
+https://www.learndatasci.com/tutorials/using-databases-python-postgres-sqlalchemy-and-alembic/
+
 - should have added .gitignore for config.py (https://12factor.net/ru/config)
 - decided to go with python-dotenv and .env file
 - https://habr.com/ru/companies/ruvds/articles/521602/ - read later
@@ -10,7 +12,8 @@
 code
 # fmt: on
 ```
-- https://habr.com/ru/articles/470285/
+- https://habr.com/ru/articles/470285/ - about SQLalchemy
+- https://habr.com/ru/articles/673344/ - about git commits
 
 
 ## checklist
@@ -50,20 +53,19 @@ class Table(Base):
 ```
 
 
-- [x] ~~write config.py~~ .env < DATABASE_URI + DONT FORGET ABOUT .GITIGNORE
+- [x] ~~write config.py~~ .env < DATABASE_URI + config.py + DONT FORGET ABOUT .GITIGNORE
 ```
 # in .env file:
 # Scheme: "postgresql+psycopg2://<USERNAME>:<PASSWORD>@<IP_ADDRESS>:<PORT>/<DATABASE_NAME>"
 DATABASE_URI=postgresql+psycopg2://postgres:nimda@localhost:5432/books
 
-# in crud.py file later:
+# in config.py file later:
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 DATABASE_URI = os.getenv("DATABASE_URI")
 ```
-
 
 - [x] create an engine (crud.py | db.py) + connect to db
 ```
@@ -199,4 +201,59 @@ print("FINAL:\n", r, "\n")
 #    .all()
 ```
 
-- [ ] migrations?
+### migrations
+https://giki.wiki/@nubela/Software-Engineering/alembic
+- [x] > alembic init alembic
+```
+# IN /alembic/env.py FILE:
+# Interpret the config file for Python logging.
+# This line sets up loggers basically.
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
+
+import sys, os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
+import study_db.config as my_config
+
+config.set_main_option("sqlalchemy.url", my_config.DATABASE_URI)
+
+# add your model's MetaData object here
+# for 'autogenerate' support
+# from myapp import mymodel
+# target_metadata = mymodel.Base.metadata
+
+from study_db.models import Base
+
+target_metadata = Base.metadata
+```
+- [x] > alembic stamp head
+- [ ] change a model in models.py
+from sqlalchemy.dialects.postgresql import MONEYprice = Column(MONEY)
+- [ ] ask Alembic what's different about the models: > alembic revision --autogenerate -m "Added price column"
+- [ ] > alembic upgrade head
+- [ ] insert prices into this table > py cli.py
+```
+from crud import Session
+from models import Book
+
+s = Session()
+
+books = s.query(Book).all()
+
+for book in books:
+    price = input(f"Price for '{book.title}': $")
+    book.price = price
+    s.add(book)
+
+s.commit()
+
+print(s.query(Book.title, Book.price).all())
+
+s.close()
+```
+- [ ] figure out the currency issue
+[('An Introduction to Statistical Learning: with Applications in R', '100,00 ?'), ('The Elements of Statistical Learning: Data Mining, Inference and Prediction', '99,00 ?'), ('Pattern Recognition and Machine Learning', '98,00 ?'), ('Machine Learning: A Probabilistic Perspective', '2,00 ?'), ('Deep Learning', '22,00 ?')]
+### Session helper
+- [ ] 
