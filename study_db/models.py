@@ -15,4 +15,4 @@ class Book(Base):
     price = Column(MONEY)
 
     def __repr__(self):
-        return f"<Book(title={self.title}, author={self.author}, pages={self.pages}, published={self.published})>"
+        return f"<Book(title={self.title}, author={self.author}, pages={self.pages}, published={self.published}, price={self.price})>"

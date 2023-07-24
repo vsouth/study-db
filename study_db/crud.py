@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy import and_, or_
 
+from contextlib import contextmanager
 
 engine = create_engine(DATABASE_URI)
 Session = sessionmaker(bind=engine)
@@ -25,26 +26,19 @@ def recreate_database():
     Base.metadata.create_all(engine)
 
 
+@contextmanager
+def session_scope():
+    session = Session()
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
 if __name__ == "__main__":
-    s = Session()
-    # books either less than 500 pages or greater than 750 pages long
-    # books published between 2013 and 2017
-    # ordered by the number of pages
-    # limit it to one result
-
-    r = (
-        s.query(Book)
-        .filter(
-            and_(
-                or_(Book.pages < 500, Book.pages > 750),
-                Book.published.between(datetime(2013, 1, 1), datetime(2017, 1, 1)),
-            )
-        )
-        .order_by(Book.pages.desc())
-        .limit(1)
-        .first()
-    )
-
-    print("FINAL:\n", r, "\n")
-
-    s.close()
+    with session_scope() as s:
+        print(*s.query(Book).all(), sep="\n")

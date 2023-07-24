@@ -229,11 +229,11 @@ from study_db.models import Base
 target_metadata = Base.metadata
 ```
 - [x] > alembic stamp head
-- [ ] change a model in models.py
+- [x] change a model in models.py
 from sqlalchemy.dialects.postgresql import MONEYprice = Column(MONEY)
-- [ ] ask Alembic what's different about the models: > alembic revision --autogenerate -m "Added price column"
-- [ ] > alembic upgrade head
-- [ ] insert prices into this table > py cli.py
+- [x] ask Alembic what's different about the models: > alembic revision --autogenerate -m "Added price column"
+- [x] > alembic upgrade head
+- [x] insert prices into this table > py cli.py
 ```
 from crud import Session
 from models import Book
@@ -256,4 +256,22 @@ s.close()
 - [ ] figure out the currency issue
 [('An Introduction to Statistical Learning: with Applications in R', '100,00 ?'), ('The Elements of Statistical Learning: Data Mining, Inference and Prediction', '99,00 ?'), ('Pattern Recognition and Machine Learning', '98,00 ?'), ('Machine Learning: A Probabilistic Perspective', '2,00 ?'), ('Deep Learning', '22,00 ?')]
 ### Session helper
-- [ ] 
+```
+@contextmanager
+def session_scope():
+    session = Session()
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
+if __name__ == "__main__":
+    with session_scope() as s:
+        print(*s.query(Book).all(), sep="\n")
+```
+
