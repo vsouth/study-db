@@ -1,15 +1,12 @@
-from datetime import datetime
-
 from sqlalchemy import create_engine
 from config import DATABASE_URI
-from models import Base, Book
+from models import Base, Book, Genre
 from sqlalchemy.orm import sessionmaker
-
-from sqlalchemy import and_, or_
-
 from contextlib import contextmanager
 
-engine = create_engine(DATABASE_URI)
+import yaml
+
+engine = create_engine(DATABASE_URI, echo=False)
 Session = sessionmaker(bind=engine)
 
 
@@ -39,6 +36,16 @@ def session_scope():
         session.close()
 
 
+# load_yaml(Genre, "genres")
+# print(*s.query(Genre).all(), sep="\n")
+def load_yaml(ModelName, table_name: str):
+    with session_scope() as s:
+        for data in yaml.load_all(open(f"{table_name}.yaml"), Loader=yaml.SafeLoader):
+            new_data = ModelName(**data)
+            s.add(new_data)
+
+
 if __name__ == "__main__":
     with session_scope() as s:
+        print(*s.query(Genre).all(), sep="\n")
         print(*s.query(Book).all(), sep="\n")

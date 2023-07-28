@@ -274,4 +274,12 @@ if __name__ == "__main__":
     with session_scope() as s:
         print(*s.query(Book).all(), sep="\n")
 ```
+### Add table + relationship
+https://soshace.com/optimizing-database-interactions-in-python-sqlalchemy-best-practices/
+- [x] add table in models
+- [x] add relationship
+- [ ] add data in both tables
+- [ ] make several queries
+
+
 
