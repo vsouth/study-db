@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from config import DATABASE_URI
-from models import Base, Book, Genre
+from models import Base, Book, Genre, Author
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 
@@ -49,3 +49,4 @@ if __name__ == "__main__":
     with session_scope() as s:
         print(*s.query(Genre).all(), sep="\n")
         print(*s.query(Book).all(), sep="\n")
+        print(*s.query(Author).all(), sep="\n")
