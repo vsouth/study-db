@@ -15,6 +15,11 @@ code
 - https://habr.com/ru/articles/470285/ - about SQLalchemy
 - https://habr.com/ru/articles/673344/ - about git commits
 
+```
+if __name__ == "__main__":
+    pass
+```
+
 
 ## checklist
 - [x] git + poetry (for env)
@@ -276,10 +281,37 @@ if __name__ == "__main__":
 ```
 ### Add table + relationship
 https://soshace.com/optimizing-database-interactions-in-python-sqlalchemy-best-practices/
+
+
 - [x] add table in models
+given:
+Books(id, title, author)
+created:
+(genreid, bookid, genre)
 - [x] add relationship
-- [ ] add data in both tables
-- [ ] make several queries
+
+- [x] add data in both tables
+- [x] make several queries
+
+
+### A bit of refactoring
+CRUD comes from: Create, Read, Update, and Delete.
+
+follow https://fastapi.tiangolo.com/tutorial/sql-databases/ as much as possible:
+- [x] change Session to SessionLocal
+- [x] move db functions to database.py
+- [x] move Base model to database.py
+- [x] in crud.py - create and get functions (?)
+- [ ] add pydantic and schemas (?)
+- [ ] main.py
+- [ ] make sense out of session, session_scope, db, etc.
+
+
+### More queries
+- [ ] more queries
+
+### Unit tests
+- [ ] 
 
 
 
