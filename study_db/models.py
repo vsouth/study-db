@@ -1,12 +1,12 @@
+from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy import Table, Column, Integer, String, Text, ForeignKey
-from sqlalchemy.orm import relationship
 
-from database import Base
+
+Base = declarative_base()
 
 
 class Author(Base):
     __tablename__ = "authors"
-
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     biography = Column(Text)
@@ -19,9 +19,21 @@ class Author(Base):
         )
 
 
+class Genre(Base):
+    __tablename__ = "genres"
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    description = Column(Text)
+
+    def __str__(self):
+        return f" <Genre(id={self.id}, name='{self.name}', description='{self.description}')>"
+
+    def __repr__(self):
+        return f"{self.name}"
+
+
 class Book(Base):
     __tablename__ = "books"
-
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
 
@@ -32,20 +44,6 @@ class Book(Base):
 
     def __repr__(self):
         return f"<Book(id={self.id}, title='{self.title}', author='{self.author.name}', genres={self.genres})>"
-
-
-class Genre(Base):
-    __tablename__ = "genres"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    description = Column(Text)
-
-    def __str__(self):
-        return f" <Genre(id={self.id}, name='{self.name}', description='{self.description}')>"
-
-    def __repr__(self):
-        return f"{self.name}"
 
 
 book_genre = Table(
