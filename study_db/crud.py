@@ -1,73 +1,56 @@
 from sqlalchemy.orm import Session
 
-from models import Book, Genre, Author
+from models import Book, Genre, Author, book_genre
 
 
 import yaml
 
-from database import SessionLocal_scope, SessionLocal
+from database import session_scope, Session
 
 
 # load_yaml(Genre, "genres")
 # print(*s.query(Genre).all(), sep="\n")
 def load_yaml(ModelName, table_name: str):
-    with SessionLocal_scope() as s:
+    with session_scope() as s:
         for data in yaml.load_all(open(f"{table_name}.yaml"), Loader=yaml.SafeLoader):
             new_data = ModelName(**data)
             s.add(new_data)
 
 
-def get_or_create(session, model, **kwargs):
-    instance = session.query(model).filter_by(**kwargs).first()
-    if instance:
-        return instance
-    else:
-        instance = model(**kwargs)
-        session.add(instance)
-        session.commit()
-        return instance
-
-
-def get_all_genres():
-    with SessionLocal_scope() as s:
-        return s.query(Genre).all()
-
-
-def get_all_books():
-    with SessionLocal_scope() as s:
-        return s.query(Book).all()
-
-
-def get_all_authors():
-    with SessionLocal_scope() as s:
-        return s.query(Author).all()
-
-
 # C R E A T E
 
 
-def create_author(db: Session, name: str, biography: str):
+def create_author(db: Session, name: str, biography: str = ""):
     db_author = Author(name=name, biography=biography)
     db.add(db_author)
-    db.commit()
+    db.flush()
     db.refresh(db_author)
     return db_author
 
 
-def create_book(db: Session, title: str, author_id: int):
-    db_book = Book(title=title, author_id=author_id)
+def create_book(db: Session, title: str, author_id: int, genres: list[Genre] = None):
+    db_book = Book(title=title, author_id=author_id, genres=genres)
     db.add(db_book)
-    db.commit()
+    db.flush()
     db.refresh(db_book)
     return db_book
 
 
-def create_genre(db: Session, name: str, description: str):
+def create_genre(db: Session, name: str, description: str = ""):
     db_genre = Genre(name=name, description=description)
     db.add(db_genre)
-    db.commit()
+    db.flush()
     db.refresh(db_genre)
     return db_genre
+
+
+def create_book_genre(db: Session, book_id: int, genre_id: int):
+    # db_book_genre = book_genre(book_id=book_id, genre_id=genre_id)
+    # db.add(db_genre)
+    # db.commit()
+    # db.refresh(db_genre)
+    # return db_genre
+    pass
 
 
 # R E A D
@@ -85,5 +68,19 @@ def get_genre(db: Session, genre_id: int):
     return db.query(Genre).filter(Genre.id == genre_id).first()
 
 
-if __name__ == "__main__":
+# U P D A T E
+
+
+def update_author():
     pass
+
+
+def update_book():
+    pass
+
+
+def update_genre():
+    pass
+
+
+# D E L E T E

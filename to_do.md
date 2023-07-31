@@ -305,10 +305,15 @@ follow https://fastapi.tiangolo.com/tutorial/sql-databases/ as much as possible:
 - [ ] add pydantic and schemas (?)
 - [ ] main.py
 - [ ] make sense out of session, session_scope, db, etc.
-
+NOTE: should have used another branch in git
 
 ### More queries
 - [ ] more queries
+
+### PLAN
+прикрутить сюда фастапи
+юнит тесты
+а потом думоть зачем
 
 ### Unit tests
 - [ ] 

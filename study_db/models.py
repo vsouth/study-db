@@ -24,14 +24,13 @@ class Book(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
-
     author_id = Column(Integer, ForeignKey("authors.id"))
 
     author = relationship("Author", back_populates="books")
     genres = relationship("Genre", secondary="book_genre")
 
     def __repr__(self):
-        return f"<Book(id={self.id}, title='{self.title}', author='{self.author.name}', genres={self.genres})>"
+        return f"<Book(id={self.id}, title='{self.title}', author_id={self.author_id})>"
 
 
 class Genre(Base):
@@ -41,11 +40,8 @@ class Genre(Base):
     name = Column(String, nullable=False)
     description = Column(Text)
 
-    def __str__(self):
-        return f" <Genre(id={self.id}, name='{self.name}', description='{self.description}')>"
-
     def __repr__(self):
-        return f"{self.name}"
+        return f" <Genre(id={self.id}, name='{self.name}', description='{self.description}')>"
 
 
 book_genre = Table(
