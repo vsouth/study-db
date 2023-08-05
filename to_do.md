@@ -305,16 +305,21 @@ follow https://fastapi.tiangolo.com/tutorial/sql-databases/ as much as possible:
 - [ ] add pydantic and schemas (?)
 - [ ] main.py
 - [ ] make sense out of session, session_scope, db, etc.
+- [x] optimize queries in cli and crud functions
+- [ ] make update and delete functions, add get filtered by genre or author or smth else
 NOTE: should have used another branch in git
+
 
 ### More queries
 - [ ] more queries
 
 ### PLAN
+
 прикрутить сюда фастапи
 юнит тесты
 а потом думоть зачем
 
+DO YOU REMEMBER ABOUT YANDEX.HANDBOOKS ON ALGORYTHMS?
 ### Unit tests
 - [ ] 
 
